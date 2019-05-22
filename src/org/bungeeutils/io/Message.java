@@ -9,7 +9,7 @@ public class Message {
 	
 	public Message(BungeePlugin plugin, String path) {
 		this.plugin = plugin;
-		this.path = path;
+		this.path = path.toLowerCase();
 	}
 	
 	public BungeePlugin getPlugin() {
