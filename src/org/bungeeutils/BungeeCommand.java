@@ -19,7 +19,7 @@ public abstract class BungeeCommand extends Command implements TabExecutor {
 	
 	public abstract List<String> complete(CommandSender sender, String[] args);
 
-	public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+	public final Iterable<String> onTabComplete(CommandSender sender, String[] args) {
 		List<String> arguments = new ArrayList<String>();
 		for (String arg : complete(sender, args)) if (arg.toLowerCase().startsWith(args[args.length - 1].toLowerCase())) arguments.add(arg);
 		return arguments;

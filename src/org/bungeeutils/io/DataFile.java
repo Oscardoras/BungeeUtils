@@ -18,8 +18,10 @@ import net.md_5.bungee.config.YamlConfiguration;
 
 public class DataFile {
     
-    private final static List<FileCache<Configuration>> yamlConfigurationFiles = reloadYamlConfiguration();
-	private static List<FileCache<Configuration>> reloadYamlConfiguration() {
+    protected final static List<FileCache<Configuration>> yamlConfigurationFiles = new ArrayList<FileCache<Configuration>>();
+    protected final static List<FileCache<Properties>> propertiesFiles = new ArrayList<FileCache<Properties>>();
+	
+	static {
 		new Timer().schedule(new TimerTask() {
 			public void run() {
 				try {
@@ -44,11 +46,7 @@ public class DataFile {
 				}
 			}
 		}, 5000l, 5000l);
-		return new ArrayList<FileCache<Configuration>>();
-	}
-	
-	private final static List<FileCache<Properties>> propertiesFiles = reloadProperties();
-	private static List<FileCache<Properties>> reloadProperties() {
+		
 		new Timer().schedule(new TimerTask() {
 			public void run() {
 				try {
@@ -73,11 +71,10 @@ public class DataFile {
 				}
 			}
 		}, 5000l, 5000l);
-		return new ArrayList<FileCache<Properties>>();
 	}
 	
 	
-	protected File file;
+	protected final File file;
 	
 	public DataFile(String path) {
 		this.file = new File(path);

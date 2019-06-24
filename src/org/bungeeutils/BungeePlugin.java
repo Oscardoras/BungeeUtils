@@ -15,7 +15,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 
 public class BungeePlugin extends Plugin implements Listener {
 	
-	private final Map<String, Properties> translates = new HashMap<String, Properties>();
+	private final Map<String, Properties> translations = new HashMap<String, Properties>();
 	
 	public BungeePlugin() {
 		try {
@@ -23,12 +23,12 @@ public class BungeePlugin extends Plugin implements Listener {
 			Enumeration<JarEntry> entries = jarFile.entries();
 			while (entries.hasMoreElements()) {
 				JarEntry entry = entries.nextElement();
-				if (entry.getName().startsWith("translate"))
+				if (entry.getName().startsWith("translations"))
 					try {
 						Properties properties = new Properties();
 						properties.load(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(entry.getName()), Charset.forName("UTF-8")));
 						String[] files = entry.getName().split("/");
-						translates.put(files[files.length - 1].split("\\.")[0], properties);
+						translations.put(files[files.length - 1].split("\\.")[0], properties);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -39,8 +39,8 @@ public class BungeePlugin extends Plugin implements Listener {
 		}
 	}
 	
-	public Map<String, Properties> getTranslates() {
-		return translates;
+	public Map<String, Properties> getTranslations() {
+		return translations;
 	}
 	
 }
