@@ -25,6 +25,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.config.Configuration;
 
+/** Represents an offline player */
 public class OfflinePlayer {
 	
 	public final static Pattern namePattern = Pattern.compile("^[a-zA-Z0-9_]{3,16}$");
@@ -35,18 +36,34 @@ public class OfflinePlayer {
 	
 	protected final String name;
 	
+	/**
+	 * Represents an offline player
+	 * @param name the name of the player
+	 */
 	public OfflinePlayer(String name) {
 		this.name = name;
 	}
 	
+	/**
+	 * Represents an offline player
+	 * @param player a proxied player
+	 */
 	public OfflinePlayer(ProxiedPlayer player) {
 		this.name = player.getName();
 	}
 	
+	/**
+	 * Gets the name of the player
+	 * @return the name of the player
+	 */
 	public String getName() {
 		return name;
 	}
 	
+	/**
+	 * Gets the UUID of the player
+	 * @return the UUID of the player
+	 */
 	public UUID getUUID() {
 		Configuration config = players.getYML();
 		for (String key : config.getKeys())
@@ -61,24 +78,44 @@ public class OfflinePlayer {
 		else return getOfflineUUID(name);
 	}
 	
+	/**
+	 * Gets if the player is premium
+	 * @return true if the player is premium
+	 */
 	public boolean isPremium() {
 		return getOnlineUUID(name) != null;
 	}
 	
+	/**
+	 * Gets the ProxiedPlayer for this player
+	 * @return the ProxiedPlayer for this player
+	 */
 	public ProxiedPlayer getProxiedPlayer() {
 		return ProxyServer.getInstance().getPlayer(name);
 	}
 	
+	/**
+	 * Gets if the player is online
+	 * @return true if the player is online
+	 */
 	public boolean isOnline() {
 		return getProxiedPlayer() != null;
 	}
 	
+	/**
+	 * Gets the groups of this player
+	 * @return the groups of this player
+	 */
 	public List<String> getGroups() {
 		Configuration config = file.getYML();
 		if (config.contains("groups." + name)) return config.getStringList("groups." + name);
 		else return new ArrayList<String>();
 	}
 	
+	/**
+	 * Adds a group for this player
+	 * @param group the group to add
+	 */
 	public void addGroup(String group) {
 		ProxiedPlayer player = getProxiedPlayer();
 		if (player != null) player.addGroups(group);
@@ -90,6 +127,10 @@ public class OfflinePlayer {
 		}
 	}
 	
+	/**
+	 * Removes a group for this player
+	 * @param group the group to remove
+	 */
 	public void removeGroup(String group) {
 		ProxiedPlayer player = getProxiedPlayer();
 		if (player != null) player.removeGroups(group);
@@ -101,6 +142,10 @@ public class OfflinePlayer {
 		}
 	}
 	
+	/**
+	 * Check if the player has the permission
+	 * @param true if the player has the permission
+	 */
 	public boolean hasPermission(String permission) {
 		ProxiedPlayer player = getProxiedPlayer();
 		if (player != null) return player.hasPermission(permission);
@@ -128,6 +173,10 @@ public class OfflinePlayer {
 	}
 	
 	
+	/**
+	 * Check if Mojang services are online
+	 * @param true Mojang services are online
+	 */
 	public static boolean getMojangStatus() {
 		try {
 			JsonArray jsonArray = get("https://status.mojang.com/check").getAsJsonArray();
@@ -137,7 +186,7 @@ public class OfflinePlayer {
 				if (jsonObject.has("sessionserver.mojang.com") && !jsonObject.get("sessionserver.mojang.com").getAsString().equals("green")) return false;
 			}
 			return true;
-		} catch (Exception ex) {}
+		} catch (Exception e) {}
 		return false;
 	}
 	
@@ -150,7 +199,7 @@ public class OfflinePlayer {
 					UUID uuid = UUID.fromString(id.replaceFirst("(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5"));
 					cache.put(name, uuid);
 					return uuid;
-				} catch (Exception ex) {}
+				} catch (Exception e) {}
 			}
 			return null;
 		}
