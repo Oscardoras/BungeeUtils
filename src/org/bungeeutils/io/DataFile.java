@@ -16,7 +16,7 @@ import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
-/** Represents a file containing datas */
+/** Represents a file containing data */
 public class DataFile {
     
 	protected final static List<FileCache<Configuration>> yamlConfigurationFiles = new ArrayList<FileCache<Configuration>>();
@@ -60,7 +60,7 @@ public class DataFile {
 	protected final File file;
 	
 	/**
-	 * Represents a file containing datas
+	 * Represents a file containing data
 	 * @param path the path of the file
 	 */
 	public DataFile(String path) {
@@ -68,7 +68,7 @@ public class DataFile {
 	}
 	
 	/**
-	 * Represents a file containing datas
+	 * Represents a file containing data
 	 * @param file the file
 	 */
 	public DataFile(File file) {
