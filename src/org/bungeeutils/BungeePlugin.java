@@ -13,12 +13,12 @@ import java.util.jar.JarFile;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 
-/** Represents a Bungee plugin */
+/** Represents a Bungee plugin. */
 public class BungeePlugin extends Plugin implements Listener {
 	
 	private final Map<String, Properties> translations = new HashMap<String, Properties>();
 	
-	/** Represents a Bungee plugin */
+	/** Represents a Bungee plugin. */
 	public BungeePlugin() {
 		try {
 			JarFile jarFile = new JarFile(this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
@@ -42,8 +42,8 @@ public class BungeePlugin extends Plugin implements Listener {
 	}
 	
 	/**
-	 * Gets translation files for this plugin
-	 * @return a map containing the translation properties file for each set languages
+	 * Gets translation files for this plugin.
+	 * @return a map containing the translation properties files for each language defined
 	 */
 	public Map<String, Properties> getTranslations() {
 		return translations;

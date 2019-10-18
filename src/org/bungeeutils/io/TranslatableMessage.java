@@ -8,14 +8,14 @@ import org.bungeeutils.BungeePlugin;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-/** Represents a translatable message */
+/** Represents a translatable message. */
 public class TranslatableMessage {
 	
 	protected final BungeePlugin plugin;
 	protected final String path;
 	
 	/**
-	 * Represents a translatable message
+	 * Represents a translatable message.
 	 * @param plugin the plugin containing the translation files
 	 * @param path the path of the translatable message in translation files
 	 */
@@ -25,7 +25,7 @@ public class TranslatableMessage {
 	}
 	
 	/**
-	 * Gets the plugin containing the translation files
+	 * Gets the plugin containing the translation files.
 	 * @return the plugin containing the translation files
 	 */
 	public BungeePlugin getPlugin() {
@@ -33,7 +33,7 @@ public class TranslatableMessage {
 	}
 	
 	/**
-	 * Gets the path of the translatable message in translation files
+	 * Gets the path of the translatable message in translation files.
 	 * @return the path of the translatable message in translation files
 	 */
 	public String getPath() {
@@ -41,7 +41,7 @@ public class TranslatableMessage {
 	}
 	
 	/**
-	 * Gets the translated message
+	 * Gets the translated message.
 	 * @param language the language to translate the message
 	 * @param args the arguments for the translatable message
 	 * @return the String translated message
@@ -53,7 +53,7 @@ public class TranslatableMessage {
 	}
 	
 	/**
-	 * Gets the translated message
+	 * Gets the translated message.
 	 * @param sender the sender to translate the message
 	 * @param args the arguments for the translatable message
 	 * @return the String translated message
@@ -79,7 +79,13 @@ public class TranslatableMessage {
 		throw new TranslatableMessageException(path);
 	}
 	
-	protected String getLanguage(CommandSender sender) {
+	
+	/**
+	 * Gets the language of a command sender.
+	 * @param sender the command sender
+	 * @return the language of a command sender
+	 */
+	public static String getLanguage(CommandSender sender) {
 		if (sender instanceof ProxiedPlayer) return ((ProxiedPlayer) sender).getLocale().getLanguage();
 		else return "en";
 	}

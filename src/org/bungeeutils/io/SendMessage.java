@@ -1,4 +1,4 @@
-package org.bungeeutils;
+package org.bungeeutils.io;
 
 import java.util.List;
 

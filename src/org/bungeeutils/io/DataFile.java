@@ -4,13 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.ref.SoftReference;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Properties;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -18,46 +12,9 @@ import net.md_5.bungee.config.YamlConfiguration;
 
 /** Represents a file containing data */
 public class DataFile {
-    
-	protected final static List<FileCache<Configuration>> yamlConfigurationFiles = new ArrayList<FileCache<Configuration>>();
-	protected final static List<FileCache<Properties>> propertiesFiles = new ArrayList<FileCache<Properties>>();
-	
-	static {
-		new Timer().schedule(new TimerTask() {
-			public void run() {
-				try {
-					synchronized(yamlConfigurationFiles) {
-    					Iterator<FileCache<Configuration>> it = yamlConfigurationFiles.iterator();
-    					while (it.hasNext()) {
-    						Configuration config = it.next().get();
-    						if (config == null) it.remove();
-    					}
-				    }
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}, 50L, 50L);
-		
-		new Timer().schedule(new TimerTask() {
-			public void run() {
-				try {
-				    synchronized(propertiesFiles) {
-    					Iterator<FileCache<Properties>> it = propertiesFiles.iterator();
-    					while (it.hasNext()) {
-    						Properties properties = it.next().get();
-    						if (properties == null) it.remove();
-    					}
-				    }
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}, 50L, 50L);
-	}
-	
 	
 	protected final File file;
+	protected Object object;
 	
 	/**
 	 * Represents a file containing data
@@ -83,10 +40,8 @@ public class DataFile {
 		try {
 			file.setReadable(true);
 			file.setWritable(true);
-			if (!file.isFile()) {
-				if (file.exists()) file.delete();
-				file.mkdirs();
-				file.delete();
+			if (!file.exists()) {
+				file.getParentFile().mkdirs();
 				file.createNewFile();
 			}
 			return file;
@@ -100,22 +55,12 @@ public class DataFile {
 	 * Gets the config for this file
 	 * @return the YamlConfiguration object
 	 */
-	@SuppressWarnings("unlikely-arg-type")
-	public Configuration getYML() {
+	public Configuration getAsYaml() {
 		try {
-			Configuration config = null;
-			synchronized(yamlConfigurationFiles) {
-    			if (yamlConfigurationFiles.contains(this)) {
-    				config = yamlConfigurationFiles.get(yamlConfigurationFiles.indexOf(this)).get();
-    			}
-    			if (config == null) {
-    				config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile());
-    				yamlConfigurationFiles.remove(this);
-    				yamlConfigurationFiles.add(new FileCache<Configuration>(this, config));
-    			}
-			}
+			Configuration config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(getFile());
+			object = config;
 			return config;
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -125,99 +70,52 @@ public class DataFile {
 	 * Gets the properties for this file
 	 * @return the Properties object
 	 */
-	@SuppressWarnings("unlikely-arg-type")
-	public Properties getProperties() {
+	public Properties getAsProperties() {
 		try {
-			Properties properties = null;
-			synchronized(propertiesFiles) {
-    			if (propertiesFiles.contains(this)) {
-    				properties = propertiesFiles.get(propertiesFiles.indexOf(this)).get();
-    			}
-    			if (properties == null) {
-    				properties = new Properties();
-    				properties.load(new FileInputStream(getFile()));
-    				propertiesFiles.remove(this);
-    				propertiesFiles.add(new FileCache<Properties>(this, properties));
-    			}
-			}
+			Properties properties = new Properties();
+			properties.load(new FileInputStream(getFile()));
+			object = properties;
 			return properties;
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
 	/** Saves the file */
-	@SuppressWarnings("unlikely-arg-type")
 	public void save() {
-		try {
-		    synchronized(yamlConfigurationFiles) {
-    			if (yamlConfigurationFiles.contains(this)) {
-    				Configuration config = yamlConfigurationFiles.get(yamlConfigurationFiles.indexOf(this)).get();
-    				if (config != null) ConfigurationProvider.getProvider(YamlConfiguration.class).save(config, getFile());
-    				return;
-    			}
-		    }
-			synchronized(propertiesFiles) {
-    			if (propertiesFiles.contains(this)) {
-    				Properties properties = propertiesFiles.get(propertiesFiles.indexOf(this)).get();
-    				if (properties != null) properties.store(new FileOutputStream(getFile()), "");
-    				return;
-    			}
+		if (object != null) {
+			try {
+				if (object instanceof Configuration) ConfigurationProvider.getProvider(YamlConfiguration.class).save((Configuration) object, getFile());
+				else ((Properties) object).store(new FileOutputStream(getFile()), "");
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 	
 	@Override
 	public boolean equals(Object object) {
-		if (object != null) {
-			if (object instanceof DataFile)
-				try {
-					return getFile().getCanonicalPath().equals(((DataFile) object).getFile().getCanonicalPath());
-				} catch (IOException e) {
-					e.printStackTrace();
-					return getFile().getPath().equals(((DataFile) object).getFile().getPath());
-				}
-			if (object instanceof FileCache<?>) return this.equals(((FileCache<?>) object).dataFile);
+		if (object != null && object instanceof DataFile) {
+			try {
+				return file.getCanonicalPath().equals(((DataFile) object).file.getCanonicalPath());
+			} catch (IOException e) {
+				e.printStackTrace();
+				return file.getPath().equals(((DataFile) object).file.getPath());
+			}
 		}
 		return false;
 	}
 	
 	@Override
 	public int hashCode() {
+		int hash = 1;
 		try {
-			return getFile().getCanonicalPath().hashCode();
+			hash *= 6 + file.getCanonicalPath().hashCode();
 		} catch (IOException e) {
-			e.printStackTrace();
-			return getFile().getPath().hashCode();
+			hash *= 6 + file.getPath().hashCode();
 		}
-	}
-	
-}
-
-class FileCache<T> extends SoftReference<T> {
-	
-	public final DataFile dataFile;
-
-	public FileCache(DataFile dataFile, T data) {
-		super(data);
-		this.dataFile = dataFile;
-	}
-	
-	@Override
-	public boolean equals(Object object) {
-		if (object != null) {
-			if (object instanceof FileCache<?>) return dataFile.equals(((FileCache<?>) object).dataFile);
-			if (object instanceof DataFile) return dataFile.equals(object);
-		}
-		return false;
-	}
-	
-	@Override
-	public int hashCode() {
-		return dataFile.hashCode();
+		return hash;
 	}
 	
 }
