@@ -188,7 +188,7 @@ public class OfflinePlayer {
 		return false;
 	}
 	
-	protected static UUID getOnlineUUID(String name) {
+	public static UUID getOnlineUUID(String name) {
 		if (cache.containsKey(name)) return cache.get(name);
 		else {
 			if (name != null && namePattern.matcher(name).matches()) {
@@ -203,7 +203,7 @@ public class OfflinePlayer {
 		}
 	}
 	
-	protected static UUID getOfflineUUID(String name) {
+	public static UUID getOfflineUUID(String name) {
 		if (name != null && namePattern.matcher(name).matches()) {
 			UUID uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes());
 			return uuid;
