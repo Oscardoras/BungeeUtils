@@ -181,7 +181,6 @@ public class OfflinePlayer {
 			for (Object object : jsonArray) {
 				JsonObject jsonObject = (JsonObject) object;
 				if (jsonObject.has("api.mojang.com") && !jsonObject.get("api.mojang.com").getAsString().equals("green")) return false;
-				if (jsonObject.has("sessionserver.mojang.com") && !jsonObject.get("sessionserver.mojang.com").getAsString().equals("green")) return false;
 			}
 			return true;
 		} catch (Exception e) {}
