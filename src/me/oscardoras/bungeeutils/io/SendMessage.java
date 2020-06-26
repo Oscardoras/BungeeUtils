@@ -1,4 +1,4 @@
-package org.bungeeutils.io;
+package me.oscardoras.bungeeutils.io;
 
 import java.util.List;
 

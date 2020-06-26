@@ -1,10 +1,9 @@
-package org.bungeeutils.io;
+package me.oscardoras.bungeeutils.io;
 
 import java.util.Map;
 import java.util.Properties;
 
-import org.bungeeutils.BungeePlugin;
-
+import me.oscardoras.bungeeutils.BungeePlugin;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 

@@ -1,4 +1,4 @@
-package org.bungeeutils.io;
+package me.oscardoras.bungeeutils.io;
 
 import java.io.File;
 import java.io.FileInputStream;

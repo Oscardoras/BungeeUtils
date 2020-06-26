@@ -1,4 +1,4 @@
-package org.bungeeutils;
+package me.oscardoras.bungeeutils;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

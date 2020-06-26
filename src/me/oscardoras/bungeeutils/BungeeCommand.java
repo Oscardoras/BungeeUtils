@@ -1,4 +1,4 @@
-package org.bungeeutils;
+package me.oscardoras.bungeeutils;
 
 import java.util.ArrayList;
 import java.util.List;

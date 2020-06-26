@@ -1,4 +1,4 @@
-package org.bungeeutils;
+package me.oscardoras.bungeeutils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,14 +12,13 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import org.bungeeutils.io.DataFile;
-
 import com.google.common.base.Charsets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import me.oscardoras.bungeeutils.io.DataFile;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.config.Configuration;

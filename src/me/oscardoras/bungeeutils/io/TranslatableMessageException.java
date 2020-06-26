@@ -1,4 +1,4 @@
-package org.bungeeutils.io;
+package me.oscardoras.bungeeutils.io;
 
 /** Represents a translatable message not found. */
 public class TranslatableMessageException extends IllegalArgumentException {
